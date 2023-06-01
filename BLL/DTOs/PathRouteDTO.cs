@@ -10,10 +10,10 @@ namespace BLL.DTOs
 {
     public class PathRouteDTO
     {
-        public int RouteId { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }
         public int Distance { get; set; }
+        public int Price { get; set; }
 
         public static explicit operator PathRoute(PathRouteDTO dto)
         {
@@ -22,10 +22,10 @@ namespace BLL.DTOs
 
             return new PathRoute
             {
-                RouteId = dto.RouteId,
                 Source = dto.Source,
                 Destination = dto.Destination,
-                Distance = dto.Distance
+                Distance = dto.Distance,
+                Price = dto.Price
             };
         }
 
@@ -36,10 +36,10 @@ namespace BLL.DTOs
 
             return new PathRouteDTO
             {
-                RouteId = pathroute.RouteId,
                 Source = pathroute.Source,
                 Destination = pathroute.Destination,
-                Distance = pathroute.Distance
+                Distance = pathroute.Distance,
+                Price = pathroute.Price
             };
         }
     }

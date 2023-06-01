@@ -1,4 +1,5 @@
-﻿using BLL.Services;
+﻿using BLL.DTOs;
+using BLL.Services;
 using DAL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -62,7 +63,7 @@ namespace ServiceLayer.Controllers
         }
 
         [HttpPost("CreateCustomer")]
-        public IActionResult CreateCustomer(Customer customer)
+        public IActionResult CreateCustomer(CustomerDTO customer)
         {
             try
             {

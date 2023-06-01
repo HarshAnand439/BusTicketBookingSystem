@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.DTOs;
+using DAL.Models;
 using DAL.Repository;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,14 @@ namespace BLL.Services
         {
             return _customerRepository.GetCustomerById(id);
         }
-        public bool CreateCustomer(Customer customer)
+        public bool CreateCustomer(CustomerDTO customer)
         {
-            if (_customerRepository.CreateCustomer(customer))
+            var temp = new Customer
+            {
+                Name = customer.Name,
+                Age = customer.Age
+            };
+            if (_customerRepository.CreateCustomer(temp))
             {
                 return true;
             }

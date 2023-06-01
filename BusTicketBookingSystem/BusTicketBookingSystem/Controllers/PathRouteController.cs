@@ -62,7 +62,7 @@ namespace ServiceLayer.Controllers
         }
 
         [HttpPost("CreatePathRoute")]
-        public IActionResult CreatePathRoute(PathRoute pathRoute)
+        public IActionResult CreatePathRoute(PathRouteDTO pathRoute)
         {
             try
             {
@@ -81,10 +81,6 @@ namespace ServiceLayer.Controllers
                 }
                 _logger.LogInformation("Pathroute is Created");
                 return Ok("Pathroute Successfully Created");
-
-                /*_pathRouteService.CreatePathRoute(pathRoute);
-
-                return CreatedAtAction(nameof(GetPathRouteById), new { id = pathRoute.RouteId }, pathRoute);*/
             }
             catch (Exception ex)
             {
@@ -107,21 +103,6 @@ namespace ServiceLayer.Controllers
                 _logger.LogInformation("Pathroute is Created");
 
                 return Ok("Pathroute Successfully Updated");
-                /*if (pathRoute == null)
-                {
-                    return BadRequest(ModelState);
-                }
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                if (!_pathRouteService.UpdatePathRoute(pathRoute))
-                {
-                    ModelState.AddModelError("", "pathroute is not Created [CONTOLLER]");
-                    return StatusCode(500, ModelState);
-                }
-                _logger.LogInformation("Pathroute is Created");
-                return Ok("Pathroute Successfully Created");*/
             }
             catch (Exception ex)
             {

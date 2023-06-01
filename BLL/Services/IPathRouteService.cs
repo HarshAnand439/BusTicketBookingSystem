@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BLL.Services
     {
         public ICollection<PathRoute> GetAllPathRoutes();
         PathRoute GetPathRouteById(int id);
-        bool CreatePathRoute(PathRoute pathRoute);
+        bool CreatePathRoute(PathRouteDTO pathRoute);
         void UpdatePathRoute(PathRoute pathRoute);
         void DeletePathRoute(PathRoute pathRoute);
     }

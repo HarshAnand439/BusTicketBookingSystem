@@ -10,20 +10,8 @@ namespace BLL.DTOs
 {
     public class CustomerDTO
     {
-        [Key]
-        [Required]
-        public int CustomerId { get; set; }
-
-        [StringLength(255)]
-        [Required]
         public string Name { get; set; }
-
-        [StringLength(255)]
-        [Required]
-        public string Email { get; set; }
-
-        [Required]
-        public int PhoneNo { get; set; }
+        public int Age { get; set; }
 
         public static explicit operator Customer(CustomerDTO dto)
         {
@@ -32,10 +20,8 @@ namespace BLL.DTOs
 
             return new Customer
             {
-                CustomerId = dto.CustomerId,
                 Name = dto.Name,
-                Email = dto.Email,
-                PhoneNo = dto.PhoneNo
+                Age = dto.Age
             };
         }
 
@@ -46,10 +32,8 @@ namespace BLL.DTOs
 
             return new CustomerDTO
             {
-                CustomerId = customer.CustomerId,
                 Name = customer.Name,
-                Email = customer.Email,
-                PhoneNo = customer.PhoneNo
+                Age = customer.Age
             };
         }
     }

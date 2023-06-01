@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BLL.Services
     {
         public ICollection<Customer> GetAllCustomers();
         Customer GetCustomerById(int id);
-        bool CreateCustomer(Customer customer);
+        bool CreateCustomer(CustomerDTO customer);
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(Customer customer);
     }

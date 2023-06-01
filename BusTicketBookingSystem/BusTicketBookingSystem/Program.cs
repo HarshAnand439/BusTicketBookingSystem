@@ -14,19 +14,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//***************Logging***************
 builder.Logging.ClearProviders();
 builder.Logging.AddLog4Net();
 
-
-//EXTRA
+//***************Authentication***************
 //Read Appsettings
 var appSettingsSection = builder.Configuration.GetSection("AppSettings");
 builder.Services.Configure<AppSettings>(appSettingsSection);
-
 //JWT Authentication
 var appSettings = appSettingsSection.Get<AppSettings>();
 var key = Encoding.ASCII.GetBytes(appSettings.Key);
-
 //Jwt Configguration
 builder.Services.AddAuthentication(options =>
 {
@@ -47,9 +45,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],*/
     };
 });
-//EXTRA
-
-
+//***************Logging_***************
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
@@ -61,20 +57,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(
         options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
-
-/*builder.Services.IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(webBuilder =>
-        {
-            webBuilder.UseStartup<Startup>()
-                .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
-                })
-                .UseLog4Net("log4net.config");
-        });*/
-
 
 builder.Services.AddScoped<IPathRouteRepository, PathRouteRepository>();
 builder.Services.AddScoped<IPathRouteService, PathRouteService>();
@@ -89,7 +71,6 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -101,9 +82,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//EXTRA
 app.UseAuthentication();
-//EXTRA
 
 app.UseAuthorization();
 

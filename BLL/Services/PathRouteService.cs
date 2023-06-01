@@ -1,12 +1,6 @@
 ﻿using BLL.DTOs;
-using BLL.Services;
 using DAL.Models;
 using DAL.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -26,9 +20,16 @@ namespace BLL.Services
         {
             return _pathRouteRepository.GetPathRouteById(id);
         }
-        public bool CreatePathRoute(PathRoute pathRoute)
+        public bool CreatePathRoute(PathRouteDTO pathRoute)
         {
-            if (_pathRouteRepository.CreatePathRoute(pathRoute))
+            var temp = new PathRoute
+            {
+                Source = pathRoute.Source,
+                Destination = pathRoute.Destination,
+                Distance = pathRoute.Distance,
+                Price = pathRoute.Price
+            };
+            if (_pathRouteRepository.CreatePathRoute(temp))
             {
                 return true;
             }
