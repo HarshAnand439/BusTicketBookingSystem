@@ -10,15 +10,13 @@ namespace BLL.DTOs
 {
     public class BusDTO
     {
-        public int BusId { get; set; }
-        public string? BusNumber { get; set; }
+        public string BusNumber { get; set; }
         public int Capacity { get; set; }
 
         public static implicit operator BusDTO(Bus bus)
         {
             return new BusDTO
             {
-                BusId = bus.BusId,
                 BusNumber = bus.BusNumber,
                 Capacity = bus.Capacity
             };
@@ -28,7 +26,6 @@ namespace BLL.DTOs
         {
             return new Bus
             {
-                BusId = dto.BusId,
                 BusNumber = dto.BusNumber,
                 Capacity = dto.Capacity
             };

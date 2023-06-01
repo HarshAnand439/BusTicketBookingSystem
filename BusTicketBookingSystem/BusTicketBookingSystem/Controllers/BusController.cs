@@ -12,78 +12,127 @@ namespace ServiceLayer.Controllers
     [ApiController]
     public class BusController : ControllerBase
     {
-        private readonly BLL.Services.IBusService _busService;
+        private readonly IBusService _busService;
+        private readonly ILogger<BusController> _logger;
 
-        public BusController(IBusService busService)
+        public BusController(IBusService busService, ILogger<BusController> logger)
         {
             _busService = busService;
+            _logger = logger;
         }
 
-        // GET: api/Bus
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bus>>> GetBuses()
+        [HttpGet("GetBuses")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Bus>))]
+        public IActionResult GetAllBuses()
         {
-            var buses = await _busService.GetAllBusesAsync();
-
-            return Ok(buses);
-        }
-
-        // GET: api/Bus/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Bus>> GetBus(int id)
-        {
-            var bus = await _busService.GetBusByIdAsync(id);
-
-            if (bus == null)
+            try
             {
-                return NotFound("Invalid ID");
+                var Buses = _busService.GetAllBuses();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _logger.LogInformation("Buses Fetched.");
+                return Ok(Buses);
             }
-
-            return Ok(bus);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occured while retrieving Buses.");
+                return StatusCode(500);
+            }
         }
 
-        // PUT: api/Bus/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBus(int id, Bus bus)
+        [HttpGet("GetBusById")]
+        public IActionResult GetBusById(int id)
         {
-            if (id != bus.BusId)
+            try
             {
-                return BadRequest();
+                var bus = _busService.GetBusById(id);
+                if (bus == null)
+                {
+                    return NotFound();
+                }
+                _logger.LogInformation("Bus are fetched by ID");
+                return Ok(bus);
             }
-
-            var result = await _busService.UpdateBusAsync(bus);
-
-            if (!result)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, "An error occurred while retrieving a Bus by ID.");
+                return StatusCode(500);
             }
-
-            return NoContent();
         }
 
-        // POST: api/Bus
-        [HttpPost]
-        public async Task<ActionResult<Bus>> PostBus(Bus bus)
+        [HttpPost("CreateBus")]
+        public IActionResult CreateBus(BusDTO bus)
         {
-            await _busService.AddBusAsync(bus);
-
-            return CreatedAtAction("GetBus", new { id = bus.BusId }, bus);
+            try
+            {
+                if (bus == null)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!_busService.CreateBus(bus))
+                {
+                    ModelState.AddModelError("", "Bus is not Created [CONTOLLER]");
+                    return StatusCode(500, ModelState);
+                }
+                _logger.LogInformation("Bus is Created");
+                return Ok("Bus Successfully Created");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating a Bus.");
+                return StatusCode(500);
+            }
         }
 
-        // DELETE: api/Bus/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Bus>> DeleteBus(int id)
+        [HttpPut("UpdateBus")]
+        public IActionResult Updatebus(int id, Bus bus)
         {
-            var bus = await _busService.GetBusByIdAsync(id);
-
-            if (bus == null)
+            try
             {
-                return NotFound();
+                if (id != bus.BusId)
+                {
+                    return BadRequest();
+                }
+
+                _busService.UpdateBus(bus);
+                _logger.LogInformation("Bus is Created");
+
+                return Ok("Bus Successfully Updated");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating a Bus.");
+                return StatusCode(500);
+            }
+        }
 
-            await _busService.DeleteBusAsync(bus);
+        [HttpDelete("DeleteBus")]
+        public IActionResult DeleteBus(int id)
+        {
+            try
+            {
+                var bus = _busService.GetBusById(id);
 
-            return Ok(bus);
+                if (bus == null)
+                {
+                    return NotFound();
+                }
+                _busService.DeleteBus(bus);
+                _logger.LogInformation("Bus is Deleted");
+
+                return Ok("Bus Successfully Deleted");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting a Bus.");
+                return StatusCode(500);
+            }
         }
     }
 }

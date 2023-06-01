@@ -4,7 +4,7 @@ namespace DAL.Models
 {
     public class User
     {
-        [Key]
+        /*[Key]
         [Required]
         public int UserId { get; set; }
 
@@ -21,21 +21,20 @@ namespace DAL.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string? Token { get; set; }
+        public string? Token { get; set; }*/
 
-        /*[Key]
-        [Required]
+        [Key]
         public int UserId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+
+        [Required]
         public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        public string Token { get; set; }*/
-
-
-        /*public bool IsAdmin { get; set; }*/
-
-        /*public string UserName { get; set; }
-        public string Password { get; set; }*/
+        public bool IsAdmin { get; set; }
+        public string? Token { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace BLL.Services
 {
     public interface IScheduleService
     {
-        public Task<IEnumerable<Schedule>> GetAllSchedules();
-        public Task<Schedule> GetScheduleById(int id);
-        public Task CreateSchedule(Schedule schedule);
-        public Task UpdateSchedule(Schedule schedule);
-        public Task DeleteSchedule(int id);
+        public ICollection<Schedule> GetAllSchedules();
+        Schedule GetScheduleById(int id);
+        bool CreateSchedule(Schedule schedule);
+        void UpdateSchedule(Schedule schedule);
+        void DeleteSchedule(Schedule schedule);
     }
 }

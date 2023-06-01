@@ -8,39 +8,43 @@ namespace DAL.Repository
 {
     public class BusRepository : IBusRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _context;
 
         public BusRepository(AppDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
         }
 
-        public async Task<IEnumerable<Bus>> GetAllBusesAsync()
+        public ICollection<Bus> GetAllBuses()
         {
-            return await _dbContext.Buses.ToListAsync();
+            return _context.Buses.OrderBy(x => x.BusId).ToList();
         }
 
-        public async Task<Bus> GetBusByIdAsync(int id)
+        public Bus GetBusById(int id)
         {
-            return await _dbContext.Buses.FindAsync(id);
+            return _context.Buses.Where(x => x.BusId == id).FirstOrDefault();
         }
 
-        public async Task<bool> UpdateBusAsync(Bus bus)
+        public bool CreateBus(Bus bus)
         {
-            _dbContext.Entry(bus).State = EntityState.Modified;
-            return await _dbContext.SaveChangesAsync() > 0;
+            if ((_context.Buses.Add(bus)) != null)
+            {
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public async Task AddBusAsync(Bus bus)
+        public void UpdateBus(Bus bus)
         {
-            await _dbContext.Buses.AddAsync(bus);
-            await _dbContext.SaveChangesAsync();
+            _context.Buses.Update(bus);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteBusAsync(Bus bus)
+        public void DeleteBus(Bus bus)
         {
-            _dbContext.Buses.Remove(bus);
-            await _dbContext.SaveChangesAsync();
+            _context.Buses.Remove(bus);
+            _context.SaveChanges();
         }
     }
 }

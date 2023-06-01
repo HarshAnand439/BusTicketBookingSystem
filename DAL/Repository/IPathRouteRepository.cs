@@ -5,9 +5,9 @@ namespace DAL.Repository
 {
     public interface IPathRouteRepository
     {
-        public IEnumerable<PathRoute> GetAllPathRoutes();
+        public ICollection<PathRoute> GetAllPathRoutes();
         public PathRoute GetPathRouteById(int id);
-        public void CreatePathRoute(PathRoute pathRoute);
+        public bool CreatePathRoute(PathRoute pathRoute);
         public void UpdatePathRoute(PathRoute pathRoute);
         public void DeletePathRoute(PathRoute pathRoute);
     }

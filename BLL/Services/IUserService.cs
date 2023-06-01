@@ -1,17 +1,13 @@
-﻿using DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BLL.DTOs;
+using DAL.Models;
 
 namespace BLL.Services
 {
     public interface IUserService
     {
-        public Task<string> Authenticate(string username, string password);
-        public Task Register(User user);
-        public Task UpdateUser(int userId, User user);
-        public Task<User> GetUserById(int id);
+        public string Authenticate(string username, string password);
+        public string Register(NewUserDTO user);
+        /*public void UpdateUser(int userId, UserPasswordDTO userdto);*/
+        public User GetUserById(int id);
     }
 }

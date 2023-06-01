@@ -6,14 +6,14 @@ namespace DAL.Repository
 {
     public class ScheduleRepository : IScheduleRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _context;
 
         public ScheduleRepository(AppDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
         }
 
-        public async Task<IEnumerable<Schedule>> GetAllSchedules()
+        /*public async Task<IEnumerable<Schedule>> GetAllSchedules()
         {
             return await _dbContext.Schedules.ToListAsync();
         }
@@ -54,17 +54,49 @@ namespace DAL.Repository
             var schedule = await _dbContext.Schedules.FindAsync(id);
             _dbContext.Schedules.Remove(schedule);
             await _dbContext.SaveChangesAsync();
+        }*/
+
+        public ICollection<Schedule> GetAllSchedules()
+        {
+            return _context.Schedules.OrderBy(x => x.ScheduleId).ToList();
+        }
+
+        public Schedule GetScheduleById(int id)
+        {
+            return _context.Schedules.Where(x => x.ScheduleId == id).FirstOrDefault();
+        }
+
+        public bool CreateSchedule(Schedule schedule)
+        {
+            if (_context.Schedules.Add(schedule) != null)
+            {
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public void UpdateSchedule(Schedule schedule)
+        {
+            _context.Schedules.Update(schedule);
+            _context.SaveChanges();
+        }
+
+        public void DeleteSchedule(Schedule schedule)
+        {
+            _context.Schedules.Remove(schedule);
+            _context.SaveChanges();
         }
 
         public async Task<int> GetAvailableSeatsAsync(int scheduleId)
         {
-            var schedule = await _dbContext.Schedules.FindAsync(scheduleId);
+            var schedule = await _context.Schedules.FindAsync(scheduleId);
             if (schedule == null)
             {
                 throw new ArgumentException("Invalid schedule ID");
             }
 
-            var bookedSeats = await _dbContext.Bookings
+            var bookedSeats = await _context.Bookings
                 .Where(b => b.ScheduleId == scheduleId)
                 .Select(b => b.SeatNo)
                 .DefaultIfEmpty(0)

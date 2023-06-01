@@ -11,66 +11,146 @@ namespace ServiceLayer.Controllers
     [ApiController]
     public class PathRouteController : ControllerBase
     {
-        private readonly BLL.Services.IPathRouteService _pathRouteService;
+        private readonly IPathRouteService _pathRouteService;
+        private readonly ILogger<PathRouteController> _logger;
 
-        public PathRouteController(IPathRouteService pathRouteService)
+        public PathRouteController(IPathRouteService pathRouteService, ILogger<PathRouteController> logger)
         {
             _pathRouteService = pathRouteService;
+            _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<PathRoute> GetAllPathRoutes()
+        [HttpGet("GetPathRoutes")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<PathRoute>))]
+        public IActionResult GetAllPathRoutes()
         {
-            return _pathRouteService.GetAllPathRoutes();
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<PathRoute> GetPathRouteById(int id)
-        {
-            var pathRoute = _pathRouteService.GetPathRouteById(id);
-
-            if (pathRoute == null)
+            try
             {
-                return NotFound();
+                var PathRoutes = _pathRouteService.GetAllPathRoutes();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                _logger.LogInformation("PathRoutes Fetched.");
+                return Ok(PathRoutes);
             }
-
-            return pathRoute;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occured while retrieving Pathroutes.");
+                return StatusCode(500);
+            }
         }
 
-        [HttpPost]
-        public ActionResult<PathRoute> CreatePathRoute(PathRoute pathRoute)
+        [HttpGet("GetPathRouteById")]
+        public IActionResult GetPathRouteById(int id)
         {
-            _pathRouteService.CreatePathRoute(pathRoute);
-
-            return CreatedAtAction(nameof(GetPathRouteById), new { id = pathRoute.RouteId }, pathRoute);
+            try
+            {
+                var pathRoute = _pathRouteService.GetPathRouteById(id);
+                if (pathRoute == null)
+                {
+                    return NotFound();
+                }
+                _logger.LogInformation("PathRoute is fetched by ID");
+                return Ok(pathRoute);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving a PathRoute by ID.");
+                return StatusCode(500);
+            }
         }
 
-        [HttpPut("{id}")]
+        [HttpPost("CreatePathRoute")]
+        public IActionResult CreatePathRoute(PathRoute pathRoute)
+        {
+            try
+            {
+                if (pathRoute == null)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!_pathRouteService.CreatePathRoute(pathRoute))
+                {
+                    ModelState.AddModelError("", "pathroute is not Created [CONTOLLER]");
+                    return StatusCode(500, ModelState);
+                }
+                _logger.LogInformation("Pathroute is Created");
+                return Ok("Pathroute Successfully Created");
+
+                /*_pathRouteService.CreatePathRoute(pathRoute);
+
+                return CreatedAtAction(nameof(GetPathRouteById), new { id = pathRoute.RouteId }, pathRoute);*/
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating a pathroute.");
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("UpdatePathRoute")]
         public IActionResult UpdatePathRoute(int id, PathRoute pathRoute)
         {
-            if (id != pathRoute.RouteId)
+            try
             {
-                return BadRequest();
+                if (id != pathRoute.RouteId)
+                {
+                    return BadRequest();
+                }
+
+                _pathRouteService.UpdatePathRoute(pathRoute);
+                _logger.LogInformation("Pathroute is Created");
+
+                return Ok("Pathroute Successfully Updated");
+                /*if (pathRoute == null)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (!_pathRouteService.UpdatePathRoute(pathRoute))
+                {
+                    ModelState.AddModelError("", "pathroute is not Created [CONTOLLER]");
+                    return StatusCode(500, ModelState);
+                }
+                _logger.LogInformation("Pathroute is Created");
+                return Ok("Pathroute Successfully Created");*/
             }
-
-            _pathRouteService.UpdatePathRoute(pathRoute);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating a pathroute.");
+                return StatusCode(500);
+            }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeletePathRoute")]
         public IActionResult DeletePathRoute(int id)
         {
-            var pathRoute = _pathRouteService.GetPathRouteById(id);
-
-            if (pathRoute == null)
+            try
             {
-                return NotFound();
+                var pathRoute = _pathRouteService.GetPathRouteById(id);
+
+                if (pathRoute == null)
+                {
+                    return NotFound();
+                }
+                _pathRouteService.DeletePathRoute(pathRoute);
+                _logger.LogInformation("Pathroute is Deleted");
+
+                return Ok("Pathroute Successfully Deleted");
             }
-
-            _pathRouteService.DeletePathRoute(pathRoute);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting a pathroute.");
+                return StatusCode(500);
+            }
         }
     }
 }

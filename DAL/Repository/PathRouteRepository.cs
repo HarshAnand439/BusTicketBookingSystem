@@ -11,20 +11,24 @@ namespace DAL.Repository
             _context = context;
         }
 
-        public IEnumerable<PathRoute> GetAllPathRoutes()
+        public ICollection<PathRoute> GetAllPathRoutes()
         {
-            return _context.PathRoutes.ToList();
+            return _context.PathRoutes.OrderBy(x => x.RouteId).ToList();
         }
 
         public PathRoute GetPathRouteById(int id)
         {
-            return _context.PathRoutes.Find(id);
+            return _context.PathRoutes.Where(x => x.RouteId == id).FirstOrDefault();
         }
 
-        public void CreatePathRoute(PathRoute pathRoute)
+        public bool CreatePathRoute(PathRoute pathRoute)
         {
-            _context.PathRoutes.Add(pathRoute);
-            _context.SaveChanges();
+            if ((_context.PathRoutes.Add(pathRoute)) != null)
+            {
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public void UpdatePathRoute(PathRoute pathRoute)

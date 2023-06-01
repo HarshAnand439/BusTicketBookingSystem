@@ -18,7 +18,7 @@ namespace BLL.Services
         {
             _pathRouteRepository = pathRouteRepository;
         }
-        public IEnumerable<PathRoute> GetAllPathRoutes()
+        public ICollection<PathRoute> GetAllPathRoutes()
         {
             return _pathRouteRepository.GetAllPathRoutes();
         }
@@ -26,9 +26,13 @@ namespace BLL.Services
         {
             return _pathRouteRepository.GetPathRouteById(id);
         }
-        public void CreatePathRoute(PathRoute pathRoute)
+        public bool CreatePathRoute(PathRoute pathRoute)
         {
-            _pathRouteRepository.CreatePathRoute(pathRoute);
+            if (_pathRouteRepository.CreatePathRoute(pathRoute))
+            {
+                return true;
+            }
+            return false;
         }
         public void UpdatePathRoute(PathRoute pathRoute)
         {

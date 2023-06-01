@@ -1,14 +1,11 @@
-﻿using DAL.Models;
+﻿using BLL.DTOs;
+using DAL.Models;
 using DAL.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -23,14 +20,14 @@ namespace BLL.Services
             _configuration = configuration;
         }
 
-        public Task<User> GetUserById(int id)
+        public User GetUserById(int id)
         {
             return _userRepository.GetUserById(id);
         }
 
-        public async Task<string> Authenticate(string username, string password)
+        public string Authenticate(string username, string password)
         {
-            var user = await _userRepository.GetUserByUsername(username);
+            var user = _userRepository.GetUserByUsername(username);
             if (user == null || !VerifyPasswordHash(password, user.Password))
             {
                 // Authentication failed
@@ -39,30 +36,40 @@ namespace BLL.Services
 
             return GenerateJwtToken(user.UserName);
         }
-        public async Task Register(User user)
+        public string Register(NewUserDTO user)
         {
             // Hash the password before storing it in the database
             user.Password = CreatePasswordHash(user.Password);
+            var temp = new User
+            {
+                /*UserId = user.UserId,*/
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Password = user.Password,
+                IsAdmin = user.IsAdmin
+            };
 
-            await _userRepository.CreateUser(user);
+            return _userRepository.CreateUser(temp);
         }
 
-        public async Task UpdateUser(int userId, User user)
+        /*public void UpdateUser(int userId, UserPasswordDTO userdto)
         {
-            var existingUser = await _userRepository.GetUserById(userId);
+            var existingUser = _userRepository.GetUserById(userId);
             if (existingUser == null)
             {
                 // User not found
                 return;
             }
 
-            existingUser.UserName = user.UserName;
-            existingUser.Password = CreatePasswordHash(user.Password);
-            existingUser.FirstName = user.FirstName;
-            existingUser.LastName = user.LastName;
+            existingUser.Password = CreatePasswordHash(userdto.Password);
+            var temp = new User
+            {
+                Password = existingUser.Password
+            };
 
-            await _userRepository.UpdateUser(existingUser);
-        }
+            _userRepository.UpdateUser(temp);
+        }*/
         private string CreatePasswordHash(string password)
         {
             return password;

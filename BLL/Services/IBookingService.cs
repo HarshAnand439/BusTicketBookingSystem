@@ -6,10 +6,10 @@ namespace BLL.Services
 {
     public interface IBookingService
     {
-        public IEnumerable<Booking> GetAllBookings();
-        public Booking GetBookingById(int id);
-        public void CreateBooking(Booking booking);
-        public void UpdateBooking(Booking booking);
-        public void DeleteBooking(Booking booking);
+        public ICollection<Booking> GetAllBookings();
+        Booking GetBookingById(int id);
+        bool CreateBooking(Booking booking);
+        void UpdateBooking(Booking booking);
+        void DeleteBooking(Booking booking);
     }
 }

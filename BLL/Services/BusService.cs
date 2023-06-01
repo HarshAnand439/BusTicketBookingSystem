@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BLL.DTOs;
+﻿using BLL.DTOs;
 using BLL.Services;
 using DAL.Models;
 using DAL.Repository;
@@ -20,39 +19,35 @@ namespace BLL.Services
             _busRepository = busRepository;
         }
 
-        public async Task<IEnumerable<Bus>> GetAllBusesAsync()
+        public ICollection<Bus> GetAllBuses()
         {
-            return await _busRepository.GetAllBusesAsync();
+            return _busRepository.GetAllBuses();
         }
-
-        public async Task<Bus> GetBusByIdAsync(int id)
+        public Bus GetBusById(int id)
         {
-            return await _busRepository.GetBusByIdAsync(id);
+            return _busRepository.GetBusById(id);
         }
-
-        public async Task<bool> UpdateBusAsync(Bus bus)
+        public bool CreateBus(BusDTO bus)
         {
-            var existingBus = await _busRepository.GetBusByIdAsync(bus.BusId);
-
-            if (existingBus == null)
+            var temp = new Bus
             {
-                return false;
+                BusNumber = bus.BusNumber,
+                Capacity = bus.Capacity
+            };
+
+            if (_busRepository.CreateBus(temp))
+            {
+                return true;
             }
-
-            existingBus.BusNumber = bus.BusNumber;
-            existingBus.Capacity = bus.Capacity;
-
-            return await _busRepository.UpdateBusAsync(existingBus);
+            return false;
         }
-
-        public async Task AddBusAsync(Bus bus)
+        public void UpdateBus(Bus bus)
         {
-            await _busRepository.AddBusAsync(bus);
+            _busRepository.UpdateBus(bus);
         }
-
-        public async Task DeleteBusAsync(Bus bus)
+        public void DeleteBus(Bus bus)
         {
-            await _busRepository.DeleteBusAsync(bus);
+            _busRepository.DeleteBus(bus);
         }
     }
 }

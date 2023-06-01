@@ -5,7 +5,7 @@ namespace DAL.Models
 {
     public class Schedule
     {
-        [Key]
+        /*[Key]
         [Required]
         public int ScheduleId { get; set; }
 
@@ -26,6 +26,28 @@ namespace DAL.Models
         public DateTime ArrTime { get; set; }
 
         [Required]
+        public int AvailSeats { get; set; }*/
+
+        [Key]
+        public int ScheduleId { get; set; }
+
+        [ForeignKey("PathRoute")]
+        public int RouteId { get; set; }
+
+        [ForeignKey("Bus")]
+        public int BusId { get; set; }
+
+        [Required]
+        public DateTime DepTime { get; set; }
+
+        [Required]
+        public DateTime ArrTime { get; set; }
+
+        [Range(0, int.MaxValue)]
         public int AvailSeats { get; set; }
+
+        // Navigation properties
+        public PathRoute? PathRoute { get; set; }
+        public Bus? Bus { get; set; }
     }
 }

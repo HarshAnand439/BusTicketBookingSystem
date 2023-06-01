@@ -9,9 +9,9 @@ namespace BLL.Services
 {
     public interface ICustomerService
     {
-        IEnumerable<Customer> GetAllCustomers();
+        public ICollection<Customer> GetAllCustomers();
         Customer GetCustomerById(int id);
-        void CreateCustomer(Customer customer);
+        bool CreateCustomer(Customer customer);
         void UpdateCustomer(Customer customer);
         void DeleteCustomer(Customer customer);
     }

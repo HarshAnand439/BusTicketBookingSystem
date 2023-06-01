@@ -17,6 +17,36 @@ namespace BLL.Services
             _customerRepository = customerRepository;
         }
 
+        public ICollection<Customer> GetAllCustomers()
+        {
+            return _customerRepository.GetAllCustomers();
+        }
+        public Customer GetCustomerById(int id)
+        {
+            return _customerRepository.GetCustomerById(id);
+        }
+        public bool CreateCustomer(Customer customer)
+        {
+            if (_customerRepository.CreateCustomer(customer))
+            {
+                return true;
+            }
+            return false;
+        }
+        public void UpdateCustomer(Customer customer)
+        {
+            _customerRepository.UpdateCustomer(customer);
+        }
+        public void DeleteCustomer(Customer customer)
+        {
+            _customerRepository.DeleteCustomer(customer);
+        }
+
+        /*public CustomerService(ICustomerRepository customerRepository)
+        {
+            _customerRepository = customerRepository;
+        }
+
         public IEnumerable<Customer> GetAllCustomers()
         {
             return _customerRepository.GetAllCustomers();
@@ -40,6 +70,6 @@ namespace BLL.Services
         public void DeleteCustomer(Customer customer)
         {
             _customerRepository.DeleteCustomer(customer);
-        }
+        }*/
     }
 }

@@ -13,7 +13,7 @@ namespace BLL.Services
             _bookingRepository = bookingRepository;
         }
 
-        public IEnumerable<Booking> GetAllBookings()
+        /*public IEnumerable<Booking> GetAllBookings()
         {
             return _bookingRepository.GetAllBookings();
         }
@@ -33,6 +33,31 @@ namespace BLL.Services
             _bookingRepository.UpdateBooking(booking);
         }
 
+        public void DeleteBooking(Booking booking)
+        {
+            _bookingRepository.DeleteBooking(booking);
+        }*/
+
+        public ICollection<Booking> GetAllBookings()
+        {
+            return _bookingRepository.GetAllBookings();
+        }
+        public Booking GetBookingById(int id)
+        {
+            return _bookingRepository.GetBookingById(id);
+        }
+        public bool CreateBooking(Booking booking)
+        {
+            if (_bookingRepository.CreateBooking(booking))
+            {
+                return true;
+            }
+            return false;
+        }
+        public void UpdateBooking(Booking booking)
+        {
+            _bookingRepository.UpdateBooking(booking);
+        }
         public void DeleteBooking(Booking booking)
         {
             _bookingRepository.DeleteBooking(booking);

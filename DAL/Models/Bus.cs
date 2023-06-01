@@ -5,14 +5,12 @@ namespace DAL.Models
     public class Bus
     {
         [Key]
-        [Required]
         public int BusId { get; set; }
 
-        [StringLength(255)]
         [Required]
-        public string? BusNumber { get; set; }
+        public string BusNumber { get; set; }
 
-        [Required]
+        [Range(1, int.MaxValue)]
         public int Capacity { get; set; }
     }
 }

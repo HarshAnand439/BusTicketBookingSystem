@@ -10,13 +10,10 @@ namespace BLL.Services
 {
     public interface IBusService
     {
-        /*public List<BusDTO> GetBuses();
-        public BusDTO GetBusById(int id);*/
-
-        public Task<IEnumerable<Bus>> GetAllBusesAsync();
-        public Task<Bus> GetBusByIdAsync(int id);
-        public Task<bool> UpdateBusAsync(Bus bus);
-        public Task AddBusAsync(Bus bus);
-        public Task DeleteBusAsync(Bus bus);
+        public ICollection<Bus> GetAllBuses();
+        Bus GetBusById(int id);
+        bool CreateBus(BusDTO bus);
+        void UpdateBus(Bus bus);
+        void DeleteBus(Bus bus);
     }
 }

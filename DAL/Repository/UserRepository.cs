@@ -1,11 +1,6 @@
 ﻿using DAL.Data;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
@@ -18,26 +13,30 @@ namespace DAL.Repository
             _db = db;
         }
 
-        public async Task<User> GetUserById(int userId)
+        public User GetUserById(int userId)
         {
-            return await _db.Users.FindAsync(userId);
+            return _db.Users.Where(x => x.UserId == userId).FirstOrDefault();
         }
 
-        public async Task<User> GetUserByUsername(string username)
+        public User GetUserByUsername(string username)
         {
-            return await _db.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            return _db.Users.Where(x => x.UserName == username).FirstOrDefault();
         }
 
-        public async Task CreateUser(User user)
+        public string CreateUser(User user)
         {
-            _db.Users.Add(user);
-            await _db.SaveChangesAsync();
+            if((_db.Users.Add(user) != null)){
+                _db.SaveChanges();
+                return user.Token;
+            }
+            return null;
         }
 
-        public async Task UpdateUser(User user)
+        /*public void UpdateUser(User user)
         {
-            _db.Entry(user).State = EntityState.Modified;
-            await _db.SaveChangesAsync();
-        }
+            *//*_db.Entry(user).State = EntityState.Modified;*//*
+            _db.Users.Update(user);
+            _db.SaveChanges();
+        }*/
     }
 }

@@ -10,7 +10,7 @@ namespace DAL.Repository
         {
             _context = context;
         }
-        public IEnumerable<Customer> GetAllCustomers()
+        /*public IEnumerable<Customer> GetAllCustomers()
         {
             return _context.Customers.ToList();
         }
@@ -28,6 +28,38 @@ namespace DAL.Repository
             _context.Customers.Update(customer);
             _context.SaveChanges();
         }
+        public void DeleteCustomer(Customer customer)
+        {
+            _context.Customers.Remove(customer);
+            _context.SaveChanges();
+        }*/
+
+        public ICollection<Customer> GetAllCustomers()
+        {
+            return _context.Customers.OrderBy(x => x.CustomerId).ToList();
+        }
+
+        public Customer GetCustomerById(int id)
+        {
+            return _context.Customers.Where(x => x.CustomerId == id).FirstOrDefault();
+        }
+
+        public bool CreateCustomer(Customer customer)
+        {
+            if ((_context.Customers.Add(customer)) != null)
+            {
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public void UpdateCustomer(Customer customer)
+        {
+            _context.Customers.Update(customer);
+            _context.SaveChanges();
+        }
+
         public void DeleteCustomer(Customer customer)
         {
             _context.Customers.Remove(customer);
