@@ -8,7 +8,7 @@ using NUnit.Framework;
 using System;
 using System.Text;
 
-namespace BTBSystem.UnitTests
+namespace BTBSystem.UnitTests.ServiceTests
 {
     [TestFixture]
     public class UserServiceUnitTests

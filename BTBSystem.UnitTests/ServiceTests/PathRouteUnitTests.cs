@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace BTBSystem.UnitTests
+namespace BTBSystem.UnitTests.ServiceTests
 {
     [TestFixture]
     public class PathRouteServiceUnitTests

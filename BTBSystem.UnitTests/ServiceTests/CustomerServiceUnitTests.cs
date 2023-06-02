@@ -3,11 +3,12 @@ using BLL.Services;
 using DAL.Models;
 using DAL.Repository;
 using Moq;
+using Moq.Protected;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace BTBSystem.UnitTests
+namespace BTBSystem.UnitTests.ServiceTests
 {
     [TestFixture]
     public class CustomerServiceUnitTests
@@ -37,7 +38,7 @@ namespace BTBSystem.UnitTests
             var result = customerService.GetAllCustomers();
 
             // Assert
-            Assert.AreEqual(expectedCustomers, result);
+            Assert.That(result, Is.EqualTo(expectedCustomers));
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace BTBSystem.UnitTests
             Assert.That(result, Is.EqualTo(expectedCustomer));
         }
 
-        /*[Test]
+        [Test]
         public void CreateCustomer_WithValidCustomer_ReturnsTrue()
         {
             // Arrange
@@ -67,26 +68,6 @@ namespace BTBSystem.UnitTests
 
             // Assert
             Assert.That(result, Is.True);
-        }*/
-
-        [Test]
-        public void CreateCustomer_WithValidCustomer_ReturnsTrue()
-        {
-            // Arrange
-            var customerDto = new CustomerDTO { Name = "John", Age = 30 };
-            var tempCustomer = new Customer { Name = customerDto.Name, Age = customerDto.Age };
-
-            // Mock the behavior of IsValidCustomer and CreateCustomer
-            /*customerService.GetType()
-                .GetMethod("IsValidCustomer", BindingFlags.NonPublic | BindingFlags.Instance)
-                .Returns(true);*/
-            customerRepositoryMock.Setup(r => r.CreateCustomer(tempCustomer)).Returns(true);
-
-            // Act
-            var result = customerService.CreateCustomer(customerDto);
-
-            // Assert
-            Assert.IsTrue(result);
         }
 
         [Test]
@@ -99,7 +80,7 @@ namespace BTBSystem.UnitTests
             var result = customerService.CreateCustomer(customerDto);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test]
