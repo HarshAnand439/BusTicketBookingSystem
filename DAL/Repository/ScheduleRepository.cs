@@ -13,49 +13,6 @@ namespace DAL.Repository
             _context = dbContext;
         }
 
-        /*public async Task<IEnumerable<Schedule>> GetAllSchedules()
-        {
-            return await _dbContext.Schedules.ToListAsync();
-        }
-
-        public async Task<Schedule> GetScheduleById(int id)
-        {
-            return await _dbContext.Schedules.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Schedule>> GetSchedulesByRouteIdAsync(int routeId)
-        {
-            return await _dbContext.Schedules
-                .Where(s => s.RouteId == routeId)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Schedule>> GetSchedulesByBusIdAsync(int busId)
-        {
-            return await _dbContext.Schedules
-                .Where(s => s.BusId == busId)
-                .ToListAsync();
-        }
-
-        public async Task CreateSchedule(Schedule schedule)
-        {
-            await _dbContext.Schedules.AddAsync(schedule);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task UpdateSchedule(Schedule schedule)
-        {
-            _dbContext.Schedules.Update(schedule);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteSchedule(int id)
-        {
-            var schedule = await _dbContext.Schedules.FindAsync(id);
-            _dbContext.Schedules.Remove(schedule);
-            await _dbContext.SaveChangesAsync();
-        }*/
-
         public ICollection<Schedule> GetAllSchedules()
         {
             return _context.Schedules.OrderBy(x => x.ScheduleId).ToList();
@@ -86,6 +43,12 @@ namespace DAL.Repository
         {
             _context.Schedules.Remove(schedule);
             _context.SaveChanges();
+        }
+
+        public bool HasAssociatedBookings(int scheduleId)
+        {
+            // Check if the schedule has any associated bookings
+            return _context.Bookings.Any(b => b.ScheduleId == scheduleId);
         }
 
         public async Task<int> GetAvailableSeatsAsync(int scheduleId)

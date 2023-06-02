@@ -20,11 +20,11 @@ builder.Logging.AddLog4Net();
 
 //***************Authentication***************
 //Read Appsettings
-var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+var appSettingsSection = builder.Configuration.GetSection("Jwt");
 builder.Services.Configure<AppSettings>(appSettingsSection);
 //JWT Authentication
 var appSettings = appSettingsSection.Get<AppSettings>();
-var key = Encoding.ASCII.GetBytes(appSettings.Key);
+var key = Encoding.UTF8.GetBytes("Jwt:Key");
 //Jwt Configguration
 builder.Services.AddAuthentication(options =>
 {
@@ -40,9 +40,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = true,
-        ValidateAudience = false
-        /*ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],*/
+        ValidateAudience = false,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
     };
 });
 //***************Logging_***************

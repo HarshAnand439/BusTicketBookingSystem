@@ -8,7 +8,7 @@ namespace BLL.Services
     {
         public ICollection<Booking> GetAllBookings();
         Booking GetBookingById(int id);
-        bool CreateBooking(Booking booking);
+        bool CreateBooking(BookingDTO booking);
         void UpdateBooking(Booking booking);
         void DeleteBooking(Booking booking);
     }

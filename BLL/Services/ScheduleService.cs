@@ -18,31 +18,6 @@ namespace BLL.Services
             _scheduleRepository = scheduleRepository;
         }
 
-        /*public async Task<IEnumerable<Schedule>> GetAllSchedules()
-        {
-            return await _scheduleRepository.GetAllSchedules();
-        }
-
-        public async Task<Schedule> GetScheduleById(int id)
-        {
-            return await _scheduleRepository.GetScheduleById(id);
-        }
-
-        public async Task CreateSchedule(Schedule schedule)
-        {
-            await _scheduleRepository.CreateSchedule(schedule);
-        }
-
-        public async Task UpdateSchedule(Schedule schedule)
-        {
-            await _scheduleRepository.UpdateSchedule(schedule);
-        }
-
-        public async Task DeleteSchedule(int id)
-        {
-            await _scheduleRepository.DeleteSchedule(id);
-        }*/
-
         public ICollection<Schedule> GetAllSchedules()
         {
             return _scheduleRepository.GetAllSchedules();
@@ -53,27 +28,60 @@ namespace BLL.Services
         }
         public bool CreateSchedule(Schedule schedule)
         {
-            /*var temp = new Schedule
+            // Business validations before creating the schedule
+            if (schedule.DepTime >= schedule.ArrTime)
             {
-                ScheduleId = schedule.ScheduleId,
-                RouteId = schedule.RouteId,
-                BusId = schedule.BusId,
-                DepTime = schedule.DepTime,
-                ArrTime = schedule.ArrTime,
-                AvailSeats = schedule.AvailSeats
-            };*/
+                throw new InvalidDataException("Departure time must be before the arrival time.");
+            }
+
             if (_scheduleRepository.CreateSchedule(schedule))
             {
                 return true;
             }
             return false;
         }
+
+        /*public bool CreateSchedule(ScheduleDTO schedule)
+        {
+            // Business validations before creating the schedule
+            if (schedule.DepTime >= schedule.ArrTime)
+            {
+                throw new InvalidDataException("Departure time must be before the arrival time.");
+            }
+            var temp = new Schedule
+            {
+                RouteId = schedule.RouteId,
+                PathRoute = schedule.PathRoute,
+                BusId = schedule.BusId,
+                Bus = schedule.Bus,
+                DepTime = schedule.DepTime,
+                ArrTime = schedule.ArrTime,
+                AvailSeats = schedule.AvailSeats
+            };
+            if (_scheduleRepository.CreateSchedule(temp))
+            {
+                return true;
+            }
+            return false;
+        }*/
         public void UpdateSchedule(Schedule schedule)
         {
+            // Business validations before updating the schedule
+            if (schedule.DepTime >= schedule.ArrTime)
+            {
+                throw new InvalidDataException("Departure time must be before the arrival time.");
+            }
+
             _scheduleRepository.UpdateSchedule(schedule);
         }
         public void DeleteSchedule(Schedule schedule)
         {
+            // Check if the schedule has associated bookings before deleting
+            if (_scheduleRepository.HasAssociatedBookings(schedule.ScheduleId))
+            {
+                throw new InvalidOperationException("Cannot delete the schedule as it has associated bookings.");
+            }
+
             _scheduleRepository.DeleteSchedule(schedule);
         }
     }

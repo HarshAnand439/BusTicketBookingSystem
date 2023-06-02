@@ -29,12 +29,17 @@ namespace BLL.Services
         }
         public bool CreateBus(BusDTO bus)
         {
+            // Check if the BusNumber already exists
+            if (_busRepository.GetBusByNumber(bus.BusNumber) != null)
+            {
+                // BusNumber already exists, return false or throw an exception
+                return false;
+            }
             var temp = new Bus
             {
                 BusNumber = bus.BusNumber,
                 Capacity = bus.Capacity
             };
-
             if (_busRepository.CreateBus(temp))
             {
                 return true;
@@ -43,10 +48,24 @@ namespace BLL.Services
         }
         public void UpdateBus(Bus bus)
         {
+            // Check if the BusNumber already exists for a different bus
+            /*var existingBus = _busRepository.GetBusByNumber(bus.BusNumber);
+            if (existingBus != null && existingBus.BusId != bus.BusId)
+            {
+                return;
+            }*/
             _busRepository.UpdateBus(bus);
         }
         public void DeleteBus(Bus bus)
         {
+            // Check if the bus has associated schedules or bookings
+            var hasAssociatedSchedules = _busRepository.HasAssociatedSchedules(bus.BusId);
+            var hasAssociatedBookings = _busRepository.HasAssociatedBookings(bus.BusId);
+
+            if (hasAssociatedSchedules || hasAssociatedBookings)
+            {
+                return;
+            }
             _busRepository.DeleteBus(bus);
         }
     }

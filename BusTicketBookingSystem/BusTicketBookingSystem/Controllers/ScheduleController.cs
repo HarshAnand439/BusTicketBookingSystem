@@ -19,7 +19,7 @@ namespace ServiceLayer.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetSchedulees")]
+        [HttpGet("GetSchedules")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Schedule>))]
         public IActionResult GetAllSchedules()
         {
@@ -60,12 +60,12 @@ namespace ServiceLayer.Controllers
             }
         }
 
-        [HttpPost("Create Schedule")]
+        [HttpPost("CreateSchedule")]
         public IActionResult CreateSchedule(Schedule schedule)
         {
             try
             {
-                /*if (schedule == null)
+                if (schedule == null)
                 {
                     return BadRequest(ModelState);
                 }
@@ -79,8 +79,6 @@ namespace ServiceLayer.Controllers
                     return StatusCode(500, ModelState);
                 }
                 _logger.LogInformation("Schedule is Created");
-                return Ok("Schedule Successfully Created");*/
-                _scheduleService.CreateSchedule(schedule);
                 return Ok("Schedule Successfully Created");
             }
             catch (Exception ex)
@@ -134,67 +132,5 @@ namespace ServiceLayer.Controllers
                 return StatusCode(500);
             }
         }
-
-        /*[HttpGet]
-        public async Task<ActionResult<IEnumerable<Schedule>>> GetSchedules()
-        {
-            var schedules = await _scheduleService.GetAllSchedules();
-            return Ok(schedules);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Schedule>> GetScheduleById(int id)
-        {
-            var schedule = await _scheduleService.GetScheduleById(id);
-
-            if (schedule == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(schedule);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Schedule>> CreateSchedule(Schedule schedule)
-        {
-            await _scheduleService.CreateSchedule(schedule);
-            return CreatedAtAction(nameof(GetScheduleById), new { id = schedule.ScheduleId }, schedule);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSchedule(int id, Schedule schedule)
-        {
-            if (id != schedule.ScheduleId)
-            {
-                return BadRequest();
-            }
-
-            var existingSchedule = await _scheduleService.GetScheduleById(id);
-
-            if (existingSchedule == null)
-            {
-                return NotFound();
-            }
-
-            await _scheduleService.UpdateSchedule(schedule);
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSchedule(int id)
-        {
-            var existingSchedule = await _scheduleService.GetScheduleById(id);
-
-            if (existingSchedule == null)
-            {
-                return NotFound();
-            }
-
-            await _scheduleService.DeleteSchedule(id);
-
-            return NoContent();
-        }*/
     }
 }

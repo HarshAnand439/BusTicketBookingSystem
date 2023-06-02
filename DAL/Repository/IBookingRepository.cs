@@ -13,6 +13,7 @@ namespace DAL.Repository
 
         public ICollection<Booking> GetAllBookings();
         public Booking GetBookingById(int id);
+        public bool IsSeatAvailable(int scheduleId, int seatNo);
         public bool CreateBooking(Booking booking);
         public void UpdateBooking(Booking booking);
         public void DeleteBooking(Booking booking);

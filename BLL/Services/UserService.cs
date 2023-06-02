@@ -70,7 +70,9 @@ namespace BLL.Services
 
             _userRepository.UpdateUser(temp);
         }*/
-        private string CreatePasswordHash(string password)
+
+        //Kept this method as public due to Testing requirements
+        public string CreatePasswordHash(string password)
         {
             return password;
         }
@@ -84,8 +86,8 @@ namespace BLL.Services
         {
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, username)
-        };
+                new Claim(ClaimTypes.Name, username)
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

@@ -1,5 +1,6 @@
 ﻿using DAL.Data;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repository
 {
@@ -19,6 +20,16 @@ namespace DAL.Repository
         public PathRoute GetPathRouteById(int id)
         {
             return _context.PathRoutes.Where(x => x.RouteId == id).FirstOrDefault();
+        }
+
+        public PathRoute GetPathRouteByRoute(string source, string destination)
+        {
+            return _context.PathRoutes.FirstOrDefault(pr => pr.Source == source && pr.Destination == destination);
+        }
+
+        public bool HasAssociatedSchedules(int routeId)
+        {
+            return _context.Schedules.Any(s => s.RouteId == routeId);
         }
 
         public bool CreatePathRoute(PathRoute pathRoute)

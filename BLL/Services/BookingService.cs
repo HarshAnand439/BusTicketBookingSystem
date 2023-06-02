@@ -13,31 +13,6 @@ namespace BLL.Services
             _bookingRepository = bookingRepository;
         }
 
-        /*public IEnumerable<Booking> GetAllBookings()
-        {
-            return _bookingRepository.GetAllBookings();
-        }
-
-        public Booking GetBookingById(int id)
-        {
-            return _bookingRepository.GetBookingById(id);
-        }
-
-        public void CreateBooking(Booking booking)
-        {
-            _bookingRepository.CreateBooking(booking);
-        }
-
-        public void UpdateBooking(Booking booking)
-        {
-            _bookingRepository.UpdateBooking(booking);
-        }
-
-        public void DeleteBooking(Booking booking)
-        {
-            _bookingRepository.DeleteBooking(booking);
-        }*/
-
         public ICollection<Booking> GetAllBookings()
         {
             return _bookingRepository.GetAllBookings();
@@ -46,9 +21,24 @@ namespace BLL.Services
         {
             return _bookingRepository.GetBookingById(id);
         }
-        public bool CreateBooking(Booking booking)
+        public bool CreateBooking(BookingDTO booking)
         {
-            if (_bookingRepository.CreateBooking(booking))
+            /*// Check if the seat is available in the schedule
+            if (!_bookingRepository.IsSeatAvailable(booking.ScheduleId, booking.SeatNo))
+            {
+                // Seat is already booked
+                return false;
+            }*/
+
+            var temp = new Booking
+            {
+                ScheduleId = booking.ScheduleId,
+                Schedule = booking.Schedule,
+                CustomerId = booking.CustomerId,
+                Customer = booking.Customer,
+                SeatNo = booking.SeatNo
+            };
+            if (_bookingRepository.CreateBooking(temp))
             {
                 return true;
             }
@@ -60,7 +50,15 @@ namespace BLL.Services
         }
         public void DeleteBooking(Booking booking)
         {
-            _bookingRepository.DeleteBooking(booking);
+            var temp = _bookingRepository.GetBookingById(booking.BookingId);
+            if (temp != null)
+            {
+                _bookingRepository.DeleteBooking(temp);
+            }
+            else
+            {
+                return;
+            }
         }
     }
 }

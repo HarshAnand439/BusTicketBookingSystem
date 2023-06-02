@@ -22,6 +22,11 @@ namespace BLL.Services
         }
         public bool CreatePathRoute(PathRouteDTO pathRoute)
         {
+            // Check if the route already exists
+            if (_pathRouteRepository.GetPathRouteByRoute(pathRoute.Source, pathRoute.Destination) != null)
+            {
+                return false;
+            }
             var temp = new PathRoute
             {
                 Source = pathRoute.Source,
@@ -41,6 +46,14 @@ namespace BLL.Services
         }
         public void DeletePathRoute(PathRoute pathRoute)
         {
+            // Check if the path route has associated schedules
+            var hasAssociatedSchedules = _pathRouteRepository.HasAssociatedSchedules(pathRoute.RouteId);
+
+            if (hasAssociatedSchedules)
+            {
+                return;
+            }
+
             _pathRouteRepository.DeletePathRoute(pathRoute);
         }
     }

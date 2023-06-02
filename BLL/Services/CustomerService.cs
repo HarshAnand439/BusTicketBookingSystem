@@ -4,6 +4,7 @@ using DAL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,49 +34,45 @@ namespace BLL.Services
                 Name = customer.Name,
                 Age = customer.Age
             };
-            if (_customerRepository.CreateCustomer(temp))
+            /*if (IsValidCustomer(temp))
+            {*/
+                var s = _customerRepository.CreateCustomer(temp);
+                if (s)
+                {
+                    return true;
+                }
+            /*}*/
+            return false;
+            /*return _customerRepository.CreateCustomer(temp);*/
+        }
+        public void UpdateCustomer(Customer customer)
+        {
+            if (IsValidCustomer(customer))
+            {
+                _customerRepository.UpdateCustomer(customer);
+            }
+        }
+        public void DeleteCustomer(Customer customer)
+        {
+            if (HasNoAssociatedBookings(customer.CustomerId))
+            {
+                _customerRepository.DeleteCustomer(customer);
+            }
+        }
+
+        private bool IsValidCustomer(Customer customer)
+        {
+            if (customer.Age >= 10 && customer.Age <= 100)
             {
                 return true;
             }
             return false;
         }
-        public void UpdateCustomer(Customer customer)
-        {
-            _customerRepository.UpdateCustomer(customer);
-        }
-        public void DeleteCustomer(Customer customer)
-        {
-            _customerRepository.DeleteCustomer(customer);
-        }
 
-        /*public CustomerService(ICustomerRepository customerRepository)
+        private bool HasNoAssociatedBookings(int customerId)
         {
-            _customerRepository = customerRepository;
+            // Check if the customer has any associated bookings
+            return _customerRepository.GetCustomerBookingsCount(customerId) == 0;
         }
-
-        public IEnumerable<Customer> GetAllCustomers()
-        {
-            return _customerRepository.GetAllCustomers();
-        }
-
-        public Customer GetCustomerById(int id)
-        {
-            return _customerRepository.GetCustomerById(id);
-        }
-
-        public void CreateCustomer(Customer customer)
-        {
-            _customerRepository.CreateCustomer(customer);
-        }
-
-        public void UpdateCustomer(Customer customer)
-        {
-            _customerRepository.UpdateCustomer(customer);
-        }
-
-        public void DeleteCustomer(Customer customer)
-        {
-            _customerRepository.DeleteCustomer(customer);
-        }*/
     }
 }

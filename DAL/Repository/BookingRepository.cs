@@ -13,44 +13,6 @@ namespace DAL.Repository
             _context = context;
         }
 
-        /*public IEnumerable<Booking> GetAllBookings()
-        {
-            return _context.Bookings.Include(b => b.Schedule).Include(b => b.Customer);
-        }
-
-        public Booking GetBookingById(int id)
-        {
-            return _context.Bookings.Include(b => b.Schedule).Include(b => b.Customer).FirstOrDefault(b => b.BookingId == id);
-        }
-
-        public void CreateBooking(Booking booking)
-        {
-            _context.Bookings.Add(booking);
-            _context.SaveChanges();
-        }
-
-        public void UpdateBooking(Booking booking)
-        {
-            _context.Entry(booking).State = EntityState.Modified;
-            _context.SaveChanges();
-        }
-
-        *//*public void DeleteBooking(int id)
-        {
-            Booking booking = _context.Bookings.Find(id);
-            if (booking != null)
-            {
-                _context.Bookings.Remove(booking);
-                _context.SaveChanges();
-            }
-        }*//*
-
-        public void DeleteBooking(Booking booking)
-        {
-            _context.Bookings.Remove(booking);
-            _context.SaveChanges();
-        }*/
-
         public ICollection<Booking> GetAllBookings()
         {
             return _context.Bookings.OrderBy(x => x.BookingId).ToList();
@@ -59,6 +21,19 @@ namespace DAL.Repository
         public Booking GetBookingById(int id)
         {
             return _context.Bookings.Where(x => x.BookingId == id).FirstOrDefault();
+        }
+
+        public bool IsSeatAvailable(int scheduleId, int seatNo)
+        {
+            var schedule = _context.Schedules.FirstOrDefault(s => s.ScheduleId == scheduleId);
+            if (schedule == null)
+            {
+                return false;
+            }
+
+            int bookedSeats = _context.Bookings.Count(b => b.ScheduleId == scheduleId && b.SeatNo == seatNo);
+
+            return bookedSeats < schedule.AvailSeats;
         }
 
         public bool CreateBooking(Booking booking)
