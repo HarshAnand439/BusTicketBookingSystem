@@ -72,7 +72,7 @@ namespace BTBSystem.UnitTests.ServiceTests
             _userRepositoryMock.Setup(repo => repo.GetUserByUsername(username)).Returns(mockUser);
 
             // Mock the JWT configuration values
-            var validKey = Encoding.UTF8.GetBytes("Jwt:Key");
+            var validKey = Encoding.ASCII.GetBytes("Jwt:Key");
             _configurationMock.Setup(config => config["Jwt:Key"]).Returns(Convert.ToBase64String(validKey));
             _configurationMock.Setup(config => config["Jwt:Issuer"]).Returns("your_issuer");
             _configurationMock.Setup(config => config["Jwt:Audience"]).Returns("your_audience");

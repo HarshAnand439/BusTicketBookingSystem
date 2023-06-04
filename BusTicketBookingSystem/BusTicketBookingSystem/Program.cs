@@ -12,6 +12,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Add services to the container.
 
 //***************Logging***************
@@ -24,7 +34,7 @@ var appSettingsSection = builder.Configuration.GetSection("Jwt");
 builder.Services.Configure<AppSettings>(appSettingsSection);
 //JWT Authentication
 var appSettings = appSettingsSection.Get<AppSettings>();
-var key = Encoding.UTF8.GetBytes("Jwt:Key");
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 //Jwt Configguration
 builder.Services.AddAuthentication(options =>
 {
@@ -40,9 +50,10 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = true,
-        ValidateAudience = false,
+        ValidateAudience = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
+
     };
 });
 //***************Logging_***************
@@ -79,6 +90,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 
