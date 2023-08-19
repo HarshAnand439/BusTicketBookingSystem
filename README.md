@@ -1,7 +1,6 @@
-# BusTicketBookingSystem
+# TravelEase - A BusTicketBookingSystem
 DotNet FSE Project (Note: Frontend is marked as public right now)
 
-# TravelEase - A Bus Ticket Booking System
 
 TravelEase is a web application that allows users to book bus tickets conveniently online. The system offers various features such as browsing available routes, checking schedules, booking seats, and managing bookings. It's built using ASP.NET Core Web API for the backend and React for the frontend.
 
